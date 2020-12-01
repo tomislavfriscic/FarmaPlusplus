@@ -1,0 +1,114 @@
+﻿@model FarmaPlus.Models.tblZivotinja
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>tblZivotinja</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.OznakaUsneMarkice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OznakaUsneMarkice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DatumUvoza)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DatumUvoza)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.KonjID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.KonjID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SvinjaID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SvinjaID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OvcaID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OvcaID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.KozaID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.KozaID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MagaracID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MagaracID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NojID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NojID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Aktivna)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Aktivna)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tblGovedo.Ime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tblGovedo.Ime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tblPosjednik.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tblPosjednik.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tblVrstaZivotinje.Naziv)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tblVrstaZivotinje.Naziv)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ZivotinjaID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

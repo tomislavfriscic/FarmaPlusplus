@@ -1,0 +1,232 @@
+﻿@model FarmaPlus.AnimalViewModel
+@ViewBag.Title
+<h3>Registar</h3>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+
+
+@if (Session["UserID"] != null)
+{
+<div style="margin: 15px">
+    <h3>Pozdrav @Session["UserName"]</h3>
+    <br />
+</div>}
+
+
+
+
+<div class="container" style="margin-top:5%">
+    <a href="#" class="btn btn-info" onclick="AddAnimal(0)">Dodati životinju</a>
+
+    @*tablica za prikaz*@
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Broj životinje</th>
+                <th>Vrsta životinje</th>
+                <th>Ime životinje</th>
+                @*<th>Datum upisa</th>*@
+                <th>Uređivanje</th>
+                <th>Brisanje</th>
+            </tr>
+        </thead>
+
+        <tbody id="ListaZivotinja">
+            <tr id="Ucitavanje" style="color:red"></tr>
+        </tbody>
+    </table>
+
+    @*modal pop up za add i edit*@
+    <div class="modal fade" id="MyModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                    <h4 id="ModalTitle"></h4>
+                </div>
+                <div class="modal-body">
+                    <form id="form">
+                        <fieldset id="SubmitForm">
+                            @Html.HiddenFor(m => m.ZivotinjaID, new { @id = "zivId" })
+                            @Html.HiddenFor(m => m.GovedoID, new { @id = "govedoID" })
+                            @Html.HiddenFor(m => m.PosjednikID, new { @id = "posjednikID" })
+                            @Html.HiddenFor(m => m.VrstaZivotinjeID, new { @id = "vrstaZivotinjeID" })
+                            @Html.HiddenFor(m => m.Aktivna, new { @id = "zivAktivna" })
+
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.OznakaUsneMarkice, new { @id = "zivOznakaMarkice", @class = "form-control", @placeholder = "Životni broj goveda" })
+                            </div>
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.tblGovedo.Ime, new { @id = "zivIme", @class = "form-control", @placeholder = "Ime" })
+                            </div>
+                            <div class="form-group">
+                                @Html.EditorFor(m => m.tblGovedo.DatumRodenja, "{0:yyyy-MM-dd}", new { @id = "zivDatumTeljenja", @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                @*@Html.DropDownListFor(m=> m.tblGovedo.Spol, new SelectList(Enum.GetValues(typeof(Spol))), new { @id="zivSpol", @class="form-control", @placeholder = "Izaberite spol" })*@
+                                @Html.DropDownListFor(m => m.tblGovedo.Spol, (SelectList)ViewBag.Spolovi, "--Izaberite spol--", new { @id = "zivSpol" })
+                            </div>
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.tblGovedo.Pasmina, new { @id = "zivPasmina", @class = "form-control", @placeholder = "Pasmina" })
+                            </div>
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.tblGovedo.MajkaKodDrzave, new { @id = "zivMajkaKod", @class = "form-control", @placeholder = "Majka - kod države" })
+                            </div>
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.tblGovedo.MajkaZivotniBroj, new { @id = "zivMajkaZivBroj", @class = "form-control", @placeholder = "Majka - Životni broj" })
+                            </div>
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.tblGovedo.MajkaIme, new { @id = "zivMajkaIme", @class = "form-control", @placeholder = "Majka - ime" })
+                            </div>
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.tblGovedo.OtacKodDrzave, new { @id = "zivOtacKod", @class = "form-control", @placeholder = "Otac - kod države" })
+                            </div>
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.tblGovedo.OtacHbBroj, new { @id = "zivOtacHbBroj", @class = "form-control", @placeholder = "Otac - Hb broj" })
+                            </div>
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.tblGovedo.OtacIme, new { @id = "zivOtacIme", @class = "form-control", @placeholder = "Otac - ime" })
+                            </div>
+                            <div class="form-group">
+                                @Html.DisplayFor(m => m.tblGovedo.DatumUpisaURegistar, new { @id = "zivDatumUpisa", @class = "datefield", @placeholder = "Datum upisa u registar" })
+                            </div>
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.tblGovedo.Napomena, new { @id = "napomena", @class = "form-control", @placeholder = "Napomena" })
+                            </div>
+                            @Html.HiddenFor(m => m.tblGovedo.Aktivno, new { @id = "govedoAktivno" })
+                            <div class="form-group">
+                                <a href="#" class="btn btn-block btn-danger" id="SaveData">Spremanje</a>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*modal za delete*@
+    <div class="modal fade" id="DeleteConfirmation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                    <h4>Brisanje životinje</h4>
+                </div>
+                <div class="modal-body">
+                    <h4>Jeste li sigurni da želite brisati?</h4>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-primary" data-dismiss="modal">Ne</a>
+                    <a href="#" class="btn btn-primary" onclick="ConfirmDelete()">Da</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+<script>
+    $("#Ucitavanje").html("Učitavanje...");
+
+ 
+
+    $.get("/Registar/GetAnimalList", null, DataBind);
+    function DataBind(AnimalList) {
+        var SetData = $("#ListaZivotinja");
+        for (var i = 0; i < AnimalList.length; i++) {
+            var Data = "<tr class='row_" + AnimalList[i].ZivotinjaID + "'>" +
+                "<td>" + AnimalList[i].OznakaUsneMarkice + "</td>" +
+                "<td>" + AnimalList[i].VrstaZivotinjeNaziv + "</td>" +
+                "<td>" + AnimalList[i].ZivotinjaIme + "</td>" +
+                "<td>" + "<a href='#' class='btn btn-warning' onclick='EditAnimal(" + AnimalList[i].ZivotinjaID + ")'><span class='glyphicon glyphicon-edit'></span></a>" + "</td>" +
+                "<td>" + "<a href='#' class='btn btn-danger' onclick='DeleteAnimal(" + AnimalList[i].ZivotinjaID + ")'><span class='glyphicon glyphicon-trash'></span></a>" + "</td>" +
+                "</tr>";
+
+            SetData.append(Data);
+            $("#Ucitavanje").html(" ");
+        }
+    }
+
+    function AddAnimal(ZivotinjaId) {
+        $("#form")[0].reset();
+        $("#zivId").val(0);
+        $("#zivSpol option:selected").text("--Izaberite spol--");
+        $("#ModalTitle").html("Dodati životinju");
+        $("#MyModal").modal();
+    }
+
+    function EditAnimal(ZivotinjaId) {
+        var url = "/Registar/GetAnimalById?AnimalId= " + ZivotinjaId;
+        $("#ModalTitle").html("Ažuriranje podataka");
+        $("#MyModal").modal();
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+                var obj = JSON.parse(data);
+                $("#zivId").val(obj.ZivotinjaID);
+                $("#govedoID").val(obj.GovedoID);
+                $("#posjednikID").val(obj.PosjednikID);
+                $("#vrstaZivotinjeID").val(obj.VrstaZivotinjeID);
+                $("#zivAktivna").val(obj.Aktivna);
+                $("#zivOznakaMarkice").val(obj.OznakaUsneMarkice);
+                $("#zivIme").val(obj.tblGovedo.Ime);
+                $("#zivDatumTeljenja").val(obj.tblGovedo.DatumRodenja);
+                $("#zivSpol option:selected").text(obj.tblGovedo.Spol);
+                $("#zivPasmina").val(obj.tblGovedo.Pasmina);
+                $("#zivMajkaKod").val(obj.tblGovedo.MajkaKodDrzave);
+                $("#zivMajkaZivBroj").val(obj.tblGovedo.MajkaZivotniBroj);
+                $("#zivMajkaIme").val(obj.tblGovedo.MajkaIme);
+                $("#zivOtacKod").val(obj.tblGovedo.OtacKodDrzave);
+                $("#zivOtacHbBroj").val(obj.tblGovedo.OtacHbBroj);
+                $("#zivOtacIme").val(obj.tblGovedo.OtacIme);
+                $("#zivDatumUpisa").val(obj.tblGovedo.DatumUpisaURegistar);
+                $("#govedoAktivno").val(obj.tblGovedo.Aktivno);
+                $("#napomena").val(obj.tblGovedo.Napomena);
+            }
+        })
+    }
+
+    function DeleteAnimal(ZivotinjaId) {
+        $("#zivId").val(ZivotinjaId);
+        $("#DeleteConfirmation").modal("show");
+
+        console.log(ZivotinjaId);
+    }
+
+    function ConfirmDelete() {
+        var zivId = $("#zivId").val();
+
+        console.log(zivId);
+
+        $.ajax({
+            type: "POST",
+            url: "/Registar/DeleteAnimal?ZivotinjaID=" + zivId,
+            success: function () {
+                $("#DeleteConfirmation").modal("hide");
+                $(".row_" + zivId).remove();
+            }
+        })
+    }
+
+
+    $("#SaveData").click(function () {
+        var data = $("#SubmitForm").serialize();
+        $.ajax({
+            type: "Post",
+            url: "/Registar/SaveDataInDatabase",
+            data: data,
+            success: function (result) {
+                alert("Spremljeno!");
+                window.location.href = "/Registar/Index";
+                $("#MyModal").modal("hide");
+            }
+        })
+    })
+
+</script>
+

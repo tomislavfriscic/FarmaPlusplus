@@ -1,0 +1,45 @@
+﻿@model IEnumerable<FarmaPlus.Models.tblZivotinja>
+
+@{
+    ViewBag.Title = "Registar";
+}
+
+<h2>Registar</h2>
+
+<p>
+    @Html.ActionLink("Dodati životinju", "Create", "Registar2", new { @class = "btn btn-primary"})
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.OznakaUsneMarkice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tblGovedo.Ime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tblVrstaZivotinje.Naziv)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.OznakaUsneMarkice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tblGovedo.Ime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tblVrstaZivotinje.Naziv)
+        </td>
+        <td>
+            @Html.ActionLink("Uređivanje", "Edit", new { id=item.ZivotinjaID }, new { @class = "btn btn-info" }) |
+            @Html.ActionLink("Detalji", "Details", new { id=item.ZivotinjaID }, new { @class = "btn btn-primary"}) |
+            @Html.ActionLink("Brisanje", "Delete", new { id=item.ZivotinjaID }, new { @class = "btn btn-danger" })
+        </td>
+    </tr>
+}
+
+</table>

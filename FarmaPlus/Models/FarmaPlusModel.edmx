@@ -1,0 +1,600 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="FarmaPlusModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblGospodarstvo">
+          <Key>
+            <PropertyRef Name="GospodarstvoID" />
+          </Key>
+          <Property Name="GospodarstvoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JIBG" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Naziv" Type="nvarchar" MaxLength="50" />
+          <Property Name="Ulica" Type="nvarchar" MaxLength="50" />
+          <Property Name="KucniBroj" Type="smallint" />
+          <Property Name="PostanskiBroj" Type="int" />
+          <Property Name="ZupanijaID" Type="int" />
+        </EntityType>
+        <EntityType Name="tblGovedo">
+          <Key>
+            <PropertyRef Name="GovedoID" />
+          </Key>
+          <Property Name="GovedoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PosjednikID" Type="int" />
+          <Property Name="VrstaZivotinjeID" Type="int" />
+          <Property Name="Ime" Type="nvarchar" MaxLength="50" />
+          <Property Name="DatumRodenja" Type="date" />
+          <Property Name="Spol" Type="nvarchar" MaxLength="1" />
+          <Property Name="Pasmina" Type="nvarchar" MaxLength="50" />
+          <Property Name="MajkaKodDrzave" Type="nvarchar" MaxLength="3" />
+          <Property Name="MajkaZivotniBroj" Type="nvarchar" MaxLength="12" />
+          <Property Name="MajkaIme" Type="nvarchar" MaxLength="50" />
+          <Property Name="OtacKodDrzave" Type="nvarchar" MaxLength="3" />
+          <Property Name="OtacHbBroj" Type="nvarchar" MaxLength="11" />
+          <Property Name="OtacIme" Type="nvarchar" MaxLength="50" />
+          <Property Name="DatumUpisaURegistar" Type="date" />
+          <Property Name="Napomena" Type="nvarchar" MaxLength="500" />
+          <Property Name="Aktivno" Type="bit" />
+        </EntityType>
+        <EntityType Name="tblPosjednik">
+          <Key>
+            <PropertyRef Name="PosjednikID" />
+          </Key>
+          <Property Name="PosjednikID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GospodarstvoID" Type="int" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Ime" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Prezime" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Telefon" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tblUsrPsw">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="100" />
+          <Property Name="Password" Type="nvarchar" MaxLength="30" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="PosjednikID" Type="int" />
+          <Property Name="Validan" Type="bit" />
+        </EntityType>
+        <EntityType Name="tblVrstaZivotinje">
+          <Key>
+            <PropertyRef Name="VrstaZivotinjeID" />
+          </Key>
+          <Property Name="VrstaZivotinjeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Naziv" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblZivotinja">
+          <Key>
+            <PropertyRef Name="ZivotinjaID" />
+          </Key>
+          <Property Name="ZivotinjaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PosjednikID" Type="int" Nullable="false" />
+          <Property Name="VrstaZivotinjeID" Type="int" Nullable="false" />
+          <Property Name="OznakaUsneMarkice" Type="nvarchar" MaxLength="13" Nullable="false" />
+          <Property Name="DatumUvoza" Type="date" />
+          <Property Name="GovedoID" Type="int" />
+          <Property Name="KonjID" Type="int" />
+          <Property Name="SvinjaID" Type="int" />
+          <Property Name="OvcaID" Type="int" />
+          <Property Name="KozaID" Type="int" />
+          <Property Name="MagaracID" Type="int" />
+          <Property Name="NojID" Type="int" />
+          <Property Name="Aktivna" Type="bit" />
+        </EntityType>
+        <EntityType Name="tblZupanija">
+          <Key>
+            <PropertyRef Name="ZupanijaID" />
+          </Key>
+          <Property Name="ZupanijaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Naziv" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_tblGospodarstvo_tblZupanija">
+          <End Role="tblZupanija" Type="Self.tblZupanija" Multiplicity="0..1" />
+          <End Role="tblGospodarstvo" Type="Self.tblGospodarstvo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblZupanija">
+              <PropertyRef Name="ZupanijaID" />
+            </Principal>
+            <Dependent Role="tblGospodarstvo">
+              <PropertyRef Name="ZupanijaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblGovedo_tblPosjednik">
+          <End Role="tblPosjednik" Type="Self.tblPosjednik" Multiplicity="0..1" />
+          <End Role="tblGovedo" Type="Self.tblGovedo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPosjednik">
+              <PropertyRef Name="PosjednikID" />
+            </Principal>
+            <Dependent Role="tblGovedo">
+              <PropertyRef Name="PosjednikID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblGovedo_tblVrstaZivotinje">
+          <End Role="tblVrstaZivotinje" Type="Self.tblVrstaZivotinje" Multiplicity="0..1" />
+          <End Role="tblGovedo" Type="Self.tblGovedo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblVrstaZivotinje">
+              <PropertyRef Name="VrstaZivotinjeID" />
+            </Principal>
+            <Dependent Role="tblGovedo">
+              <PropertyRef Name="VrstaZivotinjeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPosjednik_tblGospodarstvo">
+          <End Role="tblGospodarstvo" Type="Self.tblGospodarstvo" Multiplicity="0..1" />
+          <End Role="tblPosjednik" Type="Self.tblPosjednik" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblGospodarstvo">
+              <PropertyRef Name="GospodarstvoID" />
+            </Principal>
+            <Dependent Role="tblPosjednik">
+              <PropertyRef Name="GospodarstvoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblUsrPsw_tblPosjednik1">
+          <End Role="tblPosjednik" Type="Self.tblPosjednik" Multiplicity="0..1" />
+          <End Role="tblUsrPsw" Type="Self.tblUsrPsw" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPosjednik">
+              <PropertyRef Name="PosjednikID" />
+            </Principal>
+            <Dependent Role="tblUsrPsw">
+              <PropertyRef Name="PosjednikID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblZivotinja_tblGovedo">
+          <End Role="tblGovedo" Type="Self.tblGovedo" Multiplicity="0..1" />
+          <End Role="tblZivotinja" Type="Self.tblZivotinja" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblGovedo">
+              <PropertyRef Name="GovedoID" />
+            </Principal>
+            <Dependent Role="tblZivotinja">
+              <PropertyRef Name="GovedoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblZivotinja_tblPosjednik">
+          <End Role="tblPosjednik" Type="Self.tblPosjednik" Multiplicity="1" />
+          <End Role="tblZivotinja" Type="Self.tblZivotinja" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPosjednik">
+              <PropertyRef Name="PosjednikID" />
+            </Principal>
+            <Dependent Role="tblZivotinja">
+              <PropertyRef Name="PosjednikID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblZivotinja_tblVrstaZivotinje">
+          <End Role="tblVrstaZivotinje" Type="Self.tblVrstaZivotinje" Multiplicity="1" />
+          <End Role="tblZivotinja" Type="Self.tblZivotinja" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblVrstaZivotinje">
+              <PropertyRef Name="VrstaZivotinjeID" />
+            </Principal>
+            <Dependent Role="tblZivotinja">
+              <PropertyRef Name="VrstaZivotinjeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FarmaPlusModelStoreContainer">
+          <EntitySet Name="tblGospodarstvo" EntityType="Self.tblGospodarstvo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblGovedo" EntityType="Self.tblGovedo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPosjednik" EntityType="Self.tblPosjednik" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblUsrPsw" EntityType="Self.tblUsrPsw" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblVrstaZivotinje" EntityType="Self.tblVrstaZivotinje" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblZivotinja" EntityType="Self.tblZivotinja" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblZupanija" EntityType="Self.tblZupanija" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tblGospodarstvo_tblZupanija" Association="Self.FK_tblGospodarstvo_tblZupanija">
+            <End Role="tblZupanija" EntitySet="tblZupanija" />
+            <End Role="tblGospodarstvo" EntitySet="tblGospodarstvo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblGovedo_tblPosjednik" Association="Self.FK_tblGovedo_tblPosjednik">
+            <End Role="tblPosjednik" EntitySet="tblPosjednik" />
+            <End Role="tblGovedo" EntitySet="tblGovedo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblGovedo_tblVrstaZivotinje" Association="Self.FK_tblGovedo_tblVrstaZivotinje">
+            <End Role="tblVrstaZivotinje" EntitySet="tblVrstaZivotinje" />
+            <End Role="tblGovedo" EntitySet="tblGovedo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPosjednik_tblGospodarstvo" Association="Self.FK_tblPosjednik_tblGospodarstvo">
+            <End Role="tblGospodarstvo" EntitySet="tblGospodarstvo" />
+            <End Role="tblPosjednik" EntitySet="tblPosjednik" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblUsrPsw_tblPosjednik1" Association="Self.FK_tblUsrPsw_tblPosjednik1">
+            <End Role="tblPosjednik" EntitySet="tblPosjednik" />
+            <End Role="tblUsrPsw" EntitySet="tblUsrPsw" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblZivotinja_tblGovedo" Association="Self.FK_tblZivotinja_tblGovedo">
+            <End Role="tblGovedo" EntitySet="tblGovedo" />
+            <End Role="tblZivotinja" EntitySet="tblZivotinja" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblZivotinja_tblPosjednik" Association="Self.FK_tblZivotinja_tblPosjednik">
+            <End Role="tblPosjednik" EntitySet="tblPosjednik" />
+            <End Role="tblZivotinja" EntitySet="tblZivotinja" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblZivotinja_tblVrstaZivotinje" Association="Self.FK_tblZivotinja_tblVrstaZivotinje">
+            <End Role="tblVrstaZivotinje" EntitySet="tblVrstaZivotinje" />
+            <End Role="tblZivotinja" EntitySet="tblZivotinja" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FarmaPlusModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tblGospodarstvo">
+          <Key>
+            <PropertyRef Name="GospodarstvoID" />
+          </Key>
+          <Property Name="GospodarstvoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JIBG" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Naziv" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Ulica" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="KucniBroj" Type="Int16" />
+          <Property Name="PostanskiBroj" Type="Int32" />
+          <Property Name="ZupanijaID" Type="Int32" />
+          <NavigationProperty Name="tblZupanija" Relationship="Self.FK_tblGospodarstvo_tblZupanija" FromRole="tblGospodarstvo" ToRole="tblZupanija" />
+          <NavigationProperty Name="tblPosjednik" Relationship="Self.FK_tblPosjednik_tblGospodarstvo" FromRole="tblGospodarstvo" ToRole="tblPosjednik" />
+        </EntityType>
+        <EntityType Name="tblGovedo">
+          <Key>
+            <PropertyRef Name="GovedoID" />
+          </Key>
+          <Property Name="GovedoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PosjednikID" Type="Int32" />
+          <Property Name="VrstaZivotinjeID" Type="Int32" />
+          <Property Name="Ime" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DatumRodenja" Type="DateTime" Precision="0" />
+          <Property Name="Spol" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="Pasmina" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MajkaKodDrzave" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="MajkaZivotniBroj" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="MajkaIme" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OtacKodDrzave" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="OtacHbBroj" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+          <Property Name="OtacIme" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DatumUpisaURegistar" Type="DateTime" Precision="0" />
+          <Property Name="Napomena" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Aktivno" Type="Boolean" />
+          <NavigationProperty Name="tblPosjednik" Relationship="Self.FK_tblGovedo_tblPosjednik" FromRole="tblGovedo" ToRole="tblPosjednik" />
+          <NavigationProperty Name="tblVrstaZivotinje" Relationship="Self.FK_tblGovedo_tblVrstaZivotinje" FromRole="tblGovedo" ToRole="tblVrstaZivotinje" />
+          <NavigationProperty Name="tblZivotinja" Relationship="Self.FK_tblZivotinja_tblGovedo" FromRole="tblGovedo" ToRole="tblZivotinja" />
+        </EntityType>
+        <EntityType Name="tblPosjednik">
+          <Key>
+            <PropertyRef Name="PosjednikID" />
+          </Key>
+          <Property Name="PosjednikID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GospodarstvoID" Type="Int32" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Ime" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Prezime" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Telefon" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblGospodarstvo" Relationship="Self.FK_tblPosjednik_tblGospodarstvo" FromRole="tblPosjednik" ToRole="tblGospodarstvo" />
+          <NavigationProperty Name="tblGovedo" Relationship="Self.FK_tblGovedo_tblPosjednik" FromRole="tblPosjednik" ToRole="tblGovedo" />
+          <NavigationProperty Name="tblUsrPsw" Relationship="Self.FK_tblUsrPsw_tblPosjednik1" FromRole="tblPosjednik" ToRole="tblUsrPsw" />
+          <NavigationProperty Name="tblZivotinja" Relationship="Self.FK_tblZivotinja_tblPosjednik" FromRole="tblPosjednik" ToRole="tblZivotinja" />
+        </EntityType>
+        <EntityType Name="tblUsrPsw">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PosjednikID" Type="Int32" />
+          <Property Name="Validan" Type="Boolean" />
+          <NavigationProperty Name="tblPosjednik" Relationship="Self.FK_tblUsrPsw_tblPosjednik1" FromRole="tblUsrPsw" ToRole="tblPosjednik" />
+        </EntityType>
+        <EntityType Name="tblVrstaZivotinje">
+          <Key>
+            <PropertyRef Name="VrstaZivotinjeID" />
+          </Key>
+          <Property Name="VrstaZivotinjeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Naziv" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="tblGovedo" Relationship="Self.FK_tblGovedo_tblVrstaZivotinje" FromRole="tblVrstaZivotinje" ToRole="tblGovedo" />
+          <NavigationProperty Name="tblZivotinja" Relationship="Self.FK_tblZivotinja_tblVrstaZivotinje" FromRole="tblVrstaZivotinje" ToRole="tblZivotinja" />
+        </EntityType>
+        <EntityType Name="tblZivotinja">
+          <Key>
+            <PropertyRef Name="ZivotinjaID" />
+          </Key>
+          <Property Name="ZivotinjaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PosjednikID" Type="Int32" Nullable="false" />
+          <Property Name="VrstaZivotinjeID" Type="Int32" Nullable="false" />
+          <Property Name="OznakaUsneMarkice" Type="String" MaxLength="13" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DatumUvoza" Type="DateTime" Precision="0" />
+          <Property Name="GovedoID" Type="Int32" />
+          <Property Name="KonjID" Type="Int32" />
+          <Property Name="SvinjaID" Type="Int32" />
+          <Property Name="OvcaID" Type="Int32" />
+          <Property Name="KozaID" Type="Int32" />
+          <Property Name="MagaracID" Type="Int32" />
+          <Property Name="NojID" Type="Int32" />
+          <Property Name="Aktivna" Type="Boolean" />
+          <NavigationProperty Name="tblGovedo" Relationship="Self.FK_tblZivotinja_tblGovedo" FromRole="tblZivotinja" ToRole="tblGovedo" />
+          <NavigationProperty Name="tblPosjednik" Relationship="Self.FK_tblZivotinja_tblPosjednik" FromRole="tblZivotinja" ToRole="tblPosjednik" />
+          <NavigationProperty Name="tblVrstaZivotinje" Relationship="Self.FK_tblZivotinja_tblVrstaZivotinje" FromRole="tblZivotinja" ToRole="tblVrstaZivotinje" />
+        </EntityType>
+        <EntityType Name="tblZupanija">
+          <Key>
+            <PropertyRef Name="ZupanijaID" />
+          </Key>
+          <Property Name="ZupanijaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Naziv" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="tblGospodarstvo" Relationship="Self.FK_tblGospodarstvo_tblZupanija" FromRole="tblZupanija" ToRole="tblGospodarstvo" />
+        </EntityType>
+        <Association Name="FK_tblGospodarstvo_tblZupanija">
+          <End Role="tblZupanija" Type="Self.tblZupanija" Multiplicity="0..1" />
+          <End Role="tblGospodarstvo" Type="Self.tblGospodarstvo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblZupanija">
+              <PropertyRef Name="ZupanijaID" />
+            </Principal>
+            <Dependent Role="tblGospodarstvo">
+              <PropertyRef Name="ZupanijaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPosjednik_tblGospodarstvo">
+          <End Role="tblGospodarstvo" Type="Self.tblGospodarstvo" Multiplicity="0..1" />
+          <End Role="tblPosjednik" Type="Self.tblPosjednik" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblGospodarstvo">
+              <PropertyRef Name="GospodarstvoID" />
+            </Principal>
+            <Dependent Role="tblPosjednik">
+              <PropertyRef Name="GospodarstvoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblGovedo_tblPosjednik">
+          <End Role="tblPosjednik" Type="Self.tblPosjednik" Multiplicity="0..1" />
+          <End Role="tblGovedo" Type="Self.tblGovedo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPosjednik">
+              <PropertyRef Name="PosjednikID" />
+            </Principal>
+            <Dependent Role="tblGovedo">
+              <PropertyRef Name="PosjednikID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblGovedo_tblVrstaZivotinje">
+          <End Role="tblVrstaZivotinje" Type="Self.tblVrstaZivotinje" Multiplicity="0..1" />
+          <End Role="tblGovedo" Type="Self.tblGovedo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblVrstaZivotinje">
+              <PropertyRef Name="VrstaZivotinjeID" />
+            </Principal>
+            <Dependent Role="tblGovedo">
+              <PropertyRef Name="VrstaZivotinjeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblZivotinja_tblGovedo">
+          <End Role="tblGovedo" Type="Self.tblGovedo" Multiplicity="0..1" />
+          <End Role="tblZivotinja" Type="Self.tblZivotinja" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblGovedo">
+              <PropertyRef Name="GovedoID" />
+            </Principal>
+            <Dependent Role="tblZivotinja">
+              <PropertyRef Name="GovedoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblUsrPsw_tblPosjednik1">
+          <End Role="tblPosjednik" Type="Self.tblPosjednik" Multiplicity="0..1" />
+          <End Role="tblUsrPsw" Type="Self.tblUsrPsw" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPosjednik">
+              <PropertyRef Name="PosjednikID" />
+            </Principal>
+            <Dependent Role="tblUsrPsw">
+              <PropertyRef Name="PosjednikID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblZivotinja_tblPosjednik">
+          <End Role="tblPosjednik" Type="Self.tblPosjednik" Multiplicity="1" />
+          <End Role="tblZivotinja" Type="Self.tblZivotinja" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPosjednik">
+              <PropertyRef Name="PosjednikID" />
+            </Principal>
+            <Dependent Role="tblZivotinja">
+              <PropertyRef Name="PosjednikID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblZivotinja_tblVrstaZivotinje">
+          <End Role="tblVrstaZivotinje" Type="Self.tblVrstaZivotinje" Multiplicity="1" />
+          <End Role="tblZivotinja" Type="Self.tblZivotinja" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblVrstaZivotinje">
+              <PropertyRef Name="VrstaZivotinjeID" />
+            </Principal>
+            <Dependent Role="tblZivotinja">
+              <PropertyRef Name="VrstaZivotinjeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FarmaPlusEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblGospodarstvo" EntityType="Self.tblGospodarstvo" />
+          <EntitySet Name="tblGovedo" EntityType="Self.tblGovedo" />
+          <EntitySet Name="tblPosjednik" EntityType="Self.tblPosjednik" />
+          <EntitySet Name="tblUsrPsw" EntityType="Self.tblUsrPsw" />
+          <EntitySet Name="tblVrstaZivotinje" EntityType="Self.tblVrstaZivotinje" />
+          <EntitySet Name="tblZivotinja" EntityType="Self.tblZivotinja" />
+          <EntitySet Name="tblZupanija" EntityType="Self.tblZupanija" />
+          <AssociationSet Name="FK_tblGospodarstvo_tblZupanija" Association="Self.FK_tblGospodarstvo_tblZupanija">
+            <End Role="tblZupanija" EntitySet="tblZupanija" />
+            <End Role="tblGospodarstvo" EntitySet="tblGospodarstvo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPosjednik_tblGospodarstvo" Association="Self.FK_tblPosjednik_tblGospodarstvo">
+            <End Role="tblGospodarstvo" EntitySet="tblGospodarstvo" />
+            <End Role="tblPosjednik" EntitySet="tblPosjednik" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblGovedo_tblPosjednik" Association="Self.FK_tblGovedo_tblPosjednik">
+            <End Role="tblPosjednik" EntitySet="tblPosjednik" />
+            <End Role="tblGovedo" EntitySet="tblGovedo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblGovedo_tblVrstaZivotinje" Association="Self.FK_tblGovedo_tblVrstaZivotinje">
+            <End Role="tblVrstaZivotinje" EntitySet="tblVrstaZivotinje" />
+            <End Role="tblGovedo" EntitySet="tblGovedo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblZivotinja_tblGovedo" Association="Self.FK_tblZivotinja_tblGovedo">
+            <End Role="tblGovedo" EntitySet="tblGovedo" />
+            <End Role="tblZivotinja" EntitySet="tblZivotinja" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblUsrPsw_tblPosjednik1" Association="Self.FK_tblUsrPsw_tblPosjednik1">
+            <End Role="tblPosjednik" EntitySet="tblPosjednik" />
+            <End Role="tblUsrPsw" EntitySet="tblUsrPsw" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblZivotinja_tblPosjednik" Association="Self.FK_tblZivotinja_tblPosjednik">
+            <End Role="tblPosjednik" EntitySet="tblPosjednik" />
+            <End Role="tblZivotinja" EntitySet="tblZivotinja" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblZivotinja_tblVrstaZivotinje" Association="Self.FK_tblZivotinja_tblVrstaZivotinje">
+            <End Role="tblVrstaZivotinje" EntitySet="tblVrstaZivotinje" />
+            <End Role="tblZivotinja" EntitySet="tblZivotinja" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FarmaPlusModelStoreContainer" CdmEntityContainer="FarmaPlusEntities">
+          <EntitySetMapping Name="tblGospodarstvo">
+            <EntityTypeMapping TypeName="FarmaPlusModel.tblGospodarstvo">
+              <MappingFragment StoreEntitySet="tblGospodarstvo">
+                <ScalarProperty Name="GospodarstvoID" ColumnName="GospodarstvoID" />
+                <ScalarProperty Name="JIBG" ColumnName="JIBG" />
+                <ScalarProperty Name="Naziv" ColumnName="Naziv" />
+                <ScalarProperty Name="Ulica" ColumnName="Ulica" />
+                <ScalarProperty Name="KucniBroj" ColumnName="KucniBroj" />
+                <ScalarProperty Name="PostanskiBroj" ColumnName="PostanskiBroj" />
+                <ScalarProperty Name="ZupanijaID" ColumnName="ZupanijaID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblGovedo">
+            <EntityTypeMapping TypeName="FarmaPlusModel.tblGovedo">
+              <MappingFragment StoreEntitySet="tblGovedo">
+                <ScalarProperty Name="GovedoID" ColumnName="GovedoID" />
+                <ScalarProperty Name="PosjednikID" ColumnName="PosjednikID" />
+                <ScalarProperty Name="VrstaZivotinjeID" ColumnName="VrstaZivotinjeID" />
+                <ScalarProperty Name="Ime" ColumnName="Ime" />
+                <ScalarProperty Name="DatumRodenja" ColumnName="DatumRodenja" />
+                <ScalarProperty Name="Spol" ColumnName="Spol" />
+                <ScalarProperty Name="Pasmina" ColumnName="Pasmina" />
+                <ScalarProperty Name="MajkaKodDrzave" ColumnName="MajkaKodDrzave" />
+                <ScalarProperty Name="MajkaZivotniBroj" ColumnName="MajkaZivotniBroj" />
+                <ScalarProperty Name="MajkaIme" ColumnName="MajkaIme" />
+                <ScalarProperty Name="OtacKodDrzave" ColumnName="OtacKodDrzave" />
+                <ScalarProperty Name="OtacHbBroj" ColumnName="OtacHbBroj" />
+                <ScalarProperty Name="OtacIme" ColumnName="OtacIme" />
+                <ScalarProperty Name="DatumUpisaURegistar" ColumnName="DatumUpisaURegistar" />
+                <ScalarProperty Name="Napomena" ColumnName="Napomena" />
+                <ScalarProperty Name="Aktivno" ColumnName="Aktivno" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPosjednik">
+            <EntityTypeMapping TypeName="FarmaPlusModel.tblPosjednik">
+              <MappingFragment StoreEntitySet="tblPosjednik">
+                <ScalarProperty Name="PosjednikID" ColumnName="PosjednikID" />
+                <ScalarProperty Name="GospodarstvoID" ColumnName="GospodarstvoID" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Ime" ColumnName="Ime" />
+                <ScalarProperty Name="Prezime" ColumnName="Prezime" />
+                <ScalarProperty Name="Telefon" ColumnName="Telefon" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblUsrPsw">
+            <EntityTypeMapping TypeName="FarmaPlusModel.tblUsrPsw">
+              <MappingFragment StoreEntitySet="tblUsrPsw">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PosjednikID" ColumnName="PosjednikID" />
+                <ScalarProperty Name="Validan" ColumnName="Validan" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblVrstaZivotinje">
+            <EntityTypeMapping TypeName="FarmaPlusModel.tblVrstaZivotinje">
+              <MappingFragment StoreEntitySet="tblVrstaZivotinje">
+                <ScalarProperty Name="VrstaZivotinjeID" ColumnName="VrstaZivotinjeID" />
+                <ScalarProperty Name="Naziv" ColumnName="Naziv" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblZivotinja">
+            <EntityTypeMapping TypeName="FarmaPlusModel.tblZivotinja">
+              <MappingFragment StoreEntitySet="tblZivotinja">
+                <ScalarProperty Name="ZivotinjaID" ColumnName="ZivotinjaID" />
+                <ScalarProperty Name="PosjednikID" ColumnName="PosjednikID" />
+                <ScalarProperty Name="VrstaZivotinjeID" ColumnName="VrstaZivotinjeID" />
+                <ScalarProperty Name="OznakaUsneMarkice" ColumnName="OznakaUsneMarkice" />
+                <ScalarProperty Name="DatumUvoza" ColumnName="DatumUvoza" />
+                <ScalarProperty Name="GovedoID" ColumnName="GovedoID" />
+                <ScalarProperty Name="KonjID" ColumnName="KonjID" />
+                <ScalarProperty Name="SvinjaID" ColumnName="SvinjaID" />
+                <ScalarProperty Name="OvcaID" ColumnName="OvcaID" />
+                <ScalarProperty Name="KozaID" ColumnName="KozaID" />
+                <ScalarProperty Name="MagaracID" ColumnName="MagaracID" />
+                <ScalarProperty Name="NojID" ColumnName="NojID" />
+                <ScalarProperty Name="Aktivna" ColumnName="Aktivna" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblZupanija">
+            <EntityTypeMapping TypeName="FarmaPlusModel.tblZupanija">
+              <MappingFragment StoreEntitySet="tblZupanija">
+                <ScalarProperty Name="ZupanijaID" ColumnName="ZupanijaID" />
+                <ScalarProperty Name="Naziv" ColumnName="Naziv" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
